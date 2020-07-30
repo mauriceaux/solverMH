@@ -2,6 +2,7 @@ import os
 from datetime import datetime
 from BD import RegistroMH
 from Problema import LectorProbOpt
+from Problema import ProblemaFactory
 from MH import MHFactory
 from Solver.GenericSolver import GenericSolver
 from BD.DTO import EstadoExperimento
@@ -19,11 +20,16 @@ if __name__ == "__main__":
         if experimento is None: break
         try:
             parametros = experimento.getParametros()
-            problema = LectorProbOpt.leer(os.path.join(C_PROBLEM, parametros.getNomProblema(), parametros.getInstProblema()))
+            problema = ProblemaFactory.crear(parametros.getNomProblema())
+            print(f"nombre del problema {problema.getNombre()}")
+            
+            if parametros.getInstProblema() is not None:
+                problema.leer(os.path.join(C_PROBLEM, parametros.getNomProblema(), parametros.getInstProblema()))
             mh = MHFactory.crear(parametros.getNomMh())
             mh.setProblema(problema)
+            mh.setParametros(parametros.getParametrosMH())
             agente = AgenteFactory.crear(parametros.getNomAgente())
-            agente.setParametros(parametros.getParametrosOptimizables())
+            agente.setParametros(parametros.getParametrosAgente())
             solver = GenericSolver()
             solver.setMH(mh)
             solver.setAgente(agente)

@@ -5,13 +5,20 @@ class Parametro:
         self.instProblema = None
         self.nomMh = None
         self.nomAgente = None
-        self.parametrosOptimizables = None
+        self.parametrosAgente = None
+        self.parametrosMH = None
     
-    def setParametrosOptimizables(self,parametros):
-        self.parametrosOptimizables = parametros
+    def setParametrosMH(self,parametros):
+        self.parametrosMH = parametros
 
-    def getParametrosOptimizables(self):
-        return self.parametrosOptimizables
+    def getParametrosMH(self):
+        return self.parametrosMH
+
+    def setParametrosAgente(self,parametros):
+        self.parametrosAgente = parametros
+
+    def getParametrosAgente(self):
+        return self.parametrosAgente
 
     def setNomProblema(self,nomProblema):
         self.nomProblema = nomProblema

@@ -5,7 +5,6 @@ class GenericSolver:
         print(f"Creando solver")
         self.mh = None
         self.agente = None
-        self.numIteraciones = 100
 
     def setMH(self,mh):
         self.mh = mh
@@ -23,11 +22,16 @@ class GenericSolver:
         print(f"Resolviendo problema")
         assert self.mh is not None, "No se ha iniciado la MH"
         assert self.agente is not None, "No se ha iniciado el Agente"
-        self.agente.setParametros(self.mh.getParamIniciales())
-        for i in range(self.numIteraciones):
-            indicadores = self.mh.aplicarBusqueda()
-            paramOptimizados = self.agente.observarIndicadores(indicadores)
-            self.mh.setParametros(paramOptimizados)
+
+        self.mh.generarPoblacion(self.mh.getParametros()["poblacion"])
+        for i in range(self.mh.getParametros()["numIter"]):
+            self.mh.realizarBusqueda()
+            indicadores = self.mh.getIndicadores()
+            self.agente.observarIndicadores(indicadores)
+            paramOptimizadosMH = self.agente.optimizarParametrosMH()
+            paramOptimizadosProblema = self.agente.optimizarParametrosProblema()
+            self.mh.setParametros(paramOptimizadosMH)
+            self.mh.problema.setParametros(paramOptimizadosProblema)
         resultados = Resultado()
         print(f"Problema resuelto")
         return resultados

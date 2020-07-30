@@ -13,3 +13,4 @@ class AgenteGenerico:
         print(f"Indicadores observados")
         return self.getParametros()
     
+    #def optimizarParametrosMH(self):
