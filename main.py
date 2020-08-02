@@ -5,7 +5,7 @@ from Problema import LectorProbOpt
 from Problema import ProblemaFactory
 from MH import MHFactory
 from Solver.GenericSolver import GenericSolver
-from BD.DTO import EstadoExperimento
+from DTO import EstadoExperimento
 from Agente import AgenteFactory
 
 
@@ -26,8 +26,11 @@ if __name__ == "__main__":
             if parametros.getInstProblema() is not None:
                 problema.leer(os.path.join(C_PROBLEM, parametros.getNomProblema(), parametros.getInstProblema()))
             mh = MHFactory.crear(parametros.getNomMh())
+            
             mh.setProblema(problema)
+            
             mh.setParametros(parametros.getParametrosMH())
+            
             agente = AgenteFactory.crear(parametros.getNomAgente())
             agente.setParametros(parametros.getParametrosAgente())
             solver = GenericSolver()

@@ -5,13 +5,29 @@ class Esfera(Problema):
     def __init__(self):
         self.numDimensiones = 2
         self.dominioDimensiones = np.array([[-100,-100],[100,100]])
+        self.mejorEvaluacion = None
+        self.mejoresSoluciones = None
+        self.parametros = {}
         print(f"Problema esfera creado")
+
+    def getIndiceMejora(self):
+        return self.indiceMejora
+    
+    def getMejorEvaluacion(self):
+        return self.mejorEvaluacion
+
+    def getMejoresSoluciones(self):
+        return self.mejoresSoluciones
 
     def getNombre(self):
         return "Esfera"
 
     def setNumDim(self, num):
         self.numDimensiones = num
+
+    def setParametros(self, parametros):
+        for parametro in parametros:
+            self.parametros[parametro] = parametros[parametro]
     
     def getNumDim(self):
         return self.numDimensiones
@@ -26,5 +42,36 @@ class Esfera(Problema):
         res = []
         for i in range(self.getNumDim()):
             res.append(np.random.uniform(low=self.getDominioDim()[0,i], high=self.getDominioDim()[1,i], size=(numero)))
+            #res.append(np.ones((numero))*100)
                 
         return np.array(res).T
+
+    def decode(self, soluciones):
+        return soluciones
+
+    def evaluarFitness(self, soluciones):
+        evaluaciones = np.sum(np.square(soluciones),axis = 1)
+        mejorEvaluacion = np.min(evaluaciones)
+        if self.mejorEvaluacion is None: self.mejorEvaluacion = mejorEvaluacion
+        idxMejorEval = evaluaciones == mejorEvaluacion
+        mejoresSoluciones = np.unique(soluciones[idxMejorEval], axis=0)
+        self.indiceMejora = self.getIndsMejora(self.mejorEvaluacion,mejorEvaluacion)
+        if mejorEvaluacion < self.mejorEvaluacion:
+            self.mejoresSoluciones = mejoresSoluciones
+            self.mejorEvaluacion = mejorEvaluacion
+        if mejorEvaluacion == self.mejorEvaluacion:
+            mejoresSolucionesL = list(mejoresSoluciones)
+            if self.mejoresSoluciones is not None:
+                mejoresSolucionesL.extend(list(self.mejoresSoluciones))
+            self.mejoresSoluciones = np.unique(np.array(mejoresSolucionesL), axis=0)
+        
+        #print(f"self.indiceMejora {self.indiceMejora} ({self.mejorEvaluacion}-{mejorEvaluacion})/{self.mejorEvaluacion} {(self.mejorEvaluacion-mejorEvaluacion)/self.mejorEvaluacion}")
+        return evaluaciones
+                
+    def getIndsMejora(self, f1, f2):
+        #cuanto mejora f2 a f1 
+        assert f1.shape == f2.shape, f"Fitness 1 {f1.shape} diferente a fitness 2 {f2.shape}"
+        return (f1-f2)/f1
+
+    def getMejorIdx(self, fitness):
+        return np.argmin(fitness)

@@ -1,4 +1,5 @@
-from BD.DTO.Resultado import Resultado
+from DTO.Resultado import Resultado
+from DTO import TipoIndicadoresMH
 
 class GenericSolver:
     def __init__(self):
@@ -24,6 +25,7 @@ class GenericSolver:
         assert self.agente is not None, "No se ha iniciado el Agente"
 
         self.mh.generarPoblacion(self.mh.getParametros()["poblacion"])
+        
         for i in range(self.mh.getParametros()["numIter"]):
             self.mh.realizarBusqueda()
             indicadores = self.mh.getIndicadores()
@@ -32,6 +34,7 @@ class GenericSolver:
             paramOptimizadosProblema = self.agente.optimizarParametrosProblema()
             self.mh.setParametros(paramOptimizadosMH)
             self.mh.problema.setParametros(paramOptimizadosProblema)
+            print(f"Mejor fitness {self.mh.problema.getMejorEvaluacion()}\tmejora acumulada {self.agente.mejoraAcumulada}")
         resultados = Resultado()
-        print(f"Problema resuelto")
+        print(f"Problema resuelto, mejor fitness {self.mh.problema.getMejorEvaluacion()}")
         return resultados
