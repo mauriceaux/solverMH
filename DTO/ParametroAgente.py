@@ -1,12 +1,23 @@
 class ParametroAgente:
-    def __init__(self):
-        self.tipo = None
-        self.paso = None
-        self.minimo = None
-        self.maximo = None
-        self.componente = None
-        self.valorInicial = None
-        self.nombre = None
+
+    def __init__(self, obj=None):
+        if obj is None:
+            self.tipo = None
+            self.paso = None
+            self.minimo = None
+            self.maximo = None
+            self.componente = None
+            self.valorInicial = None
+            self.nombre = None
+        
+        else:
+            self.tipo = obj.tipo
+            self.paso = obj.paso
+            self.minimo = obj.minimo
+            self.maximo = obj.maximo
+            self.componente = obj.componente
+            self.valorInicial = obj.valorInicial
+            self.nombre = obj.nombre
         print(f"ParametroAgente creado")
 
     def setNombre(self, nombre):

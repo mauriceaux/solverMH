@@ -1,5 +1,6 @@
 from DTO.Resultado import Resultado
 from DTO import TipoIndicadoresMH
+import json
 
 class GenericSolver:
     def __init__(self):
@@ -36,5 +37,7 @@ class GenericSolver:
             self.mh.problema.setParametros(paramOptimizadosProblema)
             print(f"Mejor fitness {self.mh.problema.getMejorEvaluacion()}\tmejora acumulada {self.agente.mejoraAcumulada}")
         resultados = Resultado()
+        resultados.setFitness(self.mh.problema.getMejorEvaluacion())
+        resultados.setMejorSolucion(json.dumps(self.mh.soluciones[self.mh.idxMejorSolucion].tolist()))
         print(f"Problema resuelto, mejor fitness {self.mh.problema.getMejorEvaluacion()}")
         return resultados

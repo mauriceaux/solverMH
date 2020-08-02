@@ -3,6 +3,9 @@ class Experimento:
         print("Construyendo un experimento")
         self.parametros = None
         self.resultado = None
+        self.id = None
+        self.resultado = None
+        self.estado = None
 
     def setParametros(self,parametros):
         self.parametros = parametros
@@ -22,3 +25,8 @@ class Experimento:
     def getEstado(self):
         return self.estado
     
+    def setId(self, id):
+        self.id = id
+
+    def getId(self):
+        return self.id

@@ -3,7 +3,7 @@ class Parametro:
         print("Construyendo un conjunto de parametros")
         self.nomProblema = None
         self.instProblema = None
-        self.nomMh = None
+        self.nomMH = None
         self.nomAgente = None
         self.parametrosAgente = None
         self.parametrosMH = None
@@ -32,11 +32,11 @@ class Parametro:
     def getInstProblema(self):
         return self.instProblema
 
-    def setNomMh(self,nomMh):
-        self.nomMh = nomMh
+    def setNomMH(self,nomMH):
+        self.nomMH = nomMH
 
-    def getNomMh(self):
-        return self.nomMh
+    def getNomMH(self):
+        return self.nomMH
 
     def setNomAgente(self,nomAgente):
         self.nomAgente = nomAgente
