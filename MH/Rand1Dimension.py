@@ -65,7 +65,9 @@ class Rand1Dimension(Metaheuristica):
         #self.indicadores = [indicadorFitness, indicadorMejora]
         self.indicadores = {
             TipoIndicadoresMH.INDICE_MEJORA:self.problema.getIndiceMejora()
-            ,TipoIndicadoresMH.FITNESS:self.problema.getMejorEvaluacion()
+            ,TipoIndicadoresMH.FITNESS_MEJOR_GLOBAL:self.problema.getMejorEvaluacion()
+            ,TipoIndicadoresMH.FITNESS_MEJOR_ITERACION:fitness[self.idxMejorSolucion]
+            ,TipoIndicadoresMH.FITNESS_PROMEDIO:np.mean(fitness)
         }
 
     def _perturbarSoluciones(self):

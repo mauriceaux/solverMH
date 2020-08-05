@@ -4,7 +4,9 @@ import numpy as np
 class Esfera(Problema):
     def __init__(self):
         self.numDimensiones = 2
-        self.dominioDimensiones = np.array([[-100,-100],[100,100]])
+        minimo = np.ones(self.numDimensiones) * -100
+        maximo = np.ones(self.numDimensiones) * 100
+        self.dominioDimensiones = np.array([minimo,maximo])
         self.mejorEvaluacion = None
         self.mejoresSoluciones = None
         self.parametros = {}
@@ -28,6 +30,9 @@ class Esfera(Problema):
     def setParametros(self, parametros):
         for parametro in parametros:
             self.parametros[parametro] = parametros[parametro]
+
+    def getParametros(self):
+        return self.parametros
     
     def getNumDim(self):
         return self.numDimensiones

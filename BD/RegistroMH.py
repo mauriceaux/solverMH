@@ -107,3 +107,14 @@ def guardarExperimento(experimento, inicio, fin):
     })
     session.commit()
     print(f"Experimento guardado")
+
+def guardaDatosIteracion(data):
+    if data is None:
+        print(f"Nada que guardar!")
+        exit()
+    session = createSession()
+    metadata = db.MetaData()
+    datosIteracion = db.Table('datos_iteracion', metadata, autoload=True, autoload_with=engine)
+    insertDatosIteracion = datosIteracion.insert()
+    session.execute(insertDatosIteracion, data)
+    session.commit()

@@ -46,11 +46,11 @@ if __name__ == "__main__":
             mh.setParametros(parametros.getParametrosMH())
             
             agente = AgenteFactory.crear(parametros.getNomAgente())
-            agente.setParametros(parametros.getParametrosAgente())
+            agente.setParametrosAutonomos(parametros.getParametrosAgente())
             solver = GenericSolver()
             solver.setMH(mh)
             solver.setAgente(agente)
-            resultado = solver.resolverProblema()
+            resultado = solver.resolverProblema(experimento.getId())
             experimento.setResultado(resultado)
             experimento.setEstado(EstadoExperimento.TERMINADO)
             fin = datetime.now()

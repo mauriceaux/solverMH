@@ -3,10 +3,17 @@ import numpy as np
 
 class AgenteGenerico:
     def __init__(self):
+        self.parametrosAuto = None
         self.parametros = None
         self.indiceMejora = 0
         self.mejoraAcumulada = 0
         print(f"Instancia de agente generico creada")
+
+    def setParametrosAutonomos(self, parametros):
+        self.parametrosAuto = parametros
+
+    def getParametrosAutonomos(self):
+        return self.parametrosAuto
 
     def setParametros(self, parametros):
         self.parametros = parametros
@@ -17,12 +24,10 @@ class AgenteGenerico:
     def observarIndicadores(self,indicadores):
         self.indiceMejora = indicadores[TipoIndicadoresMH.INDICE_MEJORA]
         self.mejoraAcumulada += indicadores[TipoIndicadoresMH.INDICE_MEJORA]
-        
-        
-    
+              
     def optimizarParametrosMH(self):
         ret = {}
-        for parametro in self.parametros:
+        for parametro in self.parametrosAuto:
             if (self.mejoraAcumulada < 0 
                 and parametro.getComponente() == TipoComponente.METAHEURISTICA):
                 if parametro.getTipo() == TipoParametro.CONTINUO :
@@ -33,7 +38,7 @@ class AgenteGenerico:
 
     def optimizarParametrosProblema(self):
         ret = {}
-        for parametro in self.parametros:
+        for parametro in self.parametrosAuto:
             if (self.mejoraAcumulada < 0.01 
                 and parametro.getComponente() == TipoComponente.PROBLEMA):
                 if parametro.getTipo() == TipoParametro.CONTINUO :
