@@ -45,22 +45,37 @@ class Esfera(Problema):
 
     def generarSoluciones(self, numero):
         res = []
-        for i in range(self.getNumDim()):
-            res.append(np.random.uniform(low=self.getDominioDim()[0,i], high=self.getDominioDim()[1,i], size=(numero)))
-            #res.append(np.ones((numero))*100)
+        if numero > 0:
+            minimos = self.getDominioDim()[0]
+            #print(minimos)
+            #exit()
+            maximos = self.getDominioDim()[1]
+            if self.mejoresSoluciones is not None:
+                promedio = np.average(self.mejoresSoluciones,axis=0)
+                minimos = promedio - (promedio*0.1)
+                maximos = promedio + (promedio*0.1)
+            for i in range(self.getNumDim()):
+                #print(f"minimo {i} {minimos}")
+                #print(f"{minimos[i]}")
+                res.append(np.random.uniform(low=minimos[i], high=maximos[i], size=(numero)))
+                #res.append(np.ones((numero))*100)
                 
         return np.array(res).T
 
     def decode(self, soluciones):
         return soluciones
 
+    def evalObj(self, soluciones):
+        return np.sum(np.square(soluciones),axis = 1)
+
     def evaluarFitness(self, soluciones):
-        evaluaciones = np.sum(np.square(soluciones),axis = 1)
+        evaluaciones = self.evalObj(soluciones)
         mejorEvaluacion = np.min(evaluaciones)
         if self.mejorEvaluacion is None: self.mejorEvaluacion = mejorEvaluacion
         idxMejorEval = evaluaciones == mejorEvaluacion
         mejoresSoluciones = np.unique(soluciones[idxMejorEval], axis=0)
         self.indiceMejora = self.getIndsMejora(self.mejorEvaluacion,mejorEvaluacion)
+        #print(f"indice mejora {self.indiceMejora}")
         if mejorEvaluacion < self.mejorEvaluacion:
             self.mejoresSoluciones = mejoresSoluciones
             self.mejorEvaluacion = mejorEvaluacion
@@ -72,7 +87,7 @@ class Esfera(Problema):
         
         #print(f"self.indiceMejora {self.indiceMejora} ({self.mejorEvaluacion}-{mejorEvaluacion})/{self.mejorEvaluacion} {(self.mejorEvaluacion-mejorEvaluacion)/self.mejorEvaluacion}")
         return evaluaciones
-                
+
     def getIndsMejora(self, f1, f2):
         #cuanto mejora f2 a f1 
         assert f1.shape == f2.shape, f"Fitness 1 {f1.shape} diferente a fitness 2 {f2.shape}"
@@ -80,3 +95,6 @@ class Esfera(Problema):
 
     def getMejorIdx(self, fitness):
         return np.argmin(fitness)
+
+    def getPeorIdx(self, fitness):
+        return np.argmax(fitness)

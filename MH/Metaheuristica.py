@@ -1,6 +1,9 @@
 import inspect
 
 class Metaheuristica:
+    NUM_ITER = "num_iter"
+    NP = "np"
+
     def __init__(self, ruta):
         print(f"metaheuristica abstracta creada")
 

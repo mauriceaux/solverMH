@@ -68,6 +68,7 @@ class Rand1Dimension(Metaheuristica):
             ,TipoIndicadoresMH.FITNESS_MEJOR_GLOBAL:self.problema.getMejorEvaluacion()
             ,TipoIndicadoresMH.FITNESS_MEJOR_ITERACION:fitness[self.idxMejorSolucion]
             ,TipoIndicadoresMH.FITNESS_PROMEDIO:np.mean(fitness)
+            ,TipoIndicadoresMH.FACTOR_EVOLUTIVO:self.getFactorEvolutivo()
         }
 
     def _perturbarSoluciones(self):
@@ -79,4 +80,24 @@ class Rand1Dimension(Metaheuristica):
 
     def getIndicadores(self):
         return self.indicadores
+
+    def getFactorEvolutivo(self):
+        if self.idxMejorSolucion is None: return None
+        if self.soluciones is None: return None
+        dg = self.calcDistProm(self.idxMejorSolucion, self.soluciones)
+        dmax = None
+        dmin = None
+        for i in range(self.soluciones.shape[0]):
+            if i == self.idxMejorSolucion: continue
+            dg = self.calcDistProm(i, self.soluciones)
+            if dmax is None or dg > dmax: dmax = dg
+            if dmin is None or dg < dmin: dmin = dg
+        return (dg-dmin)/(dmax-dmin)
+
+    def calcDistProm(self, idxSol, sols):
+        res = 0
+        for idx in range(len(sols)):
+            if idx == idxSol: continue
+            res += np.sum(np.abs(sols[idx]-sols[idxSol]))
+        return res/len(sols)-1
         
