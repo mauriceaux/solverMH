@@ -10,6 +10,9 @@ class AgenteGenerico:
         self.factorEvolutivo = []
         print(f"Instancia de agente generico creada")
 
+    def setTotIter(self, t):
+        self.totIter = t
+
     def setParametrosAutonomos(self, parametros):
         self.parametrosAuto = parametros
 
@@ -27,7 +30,7 @@ class AgenteGenerico:
         self.mejoraAcumulada += indicadores[TipoIndicadoresMH.INDICE_MEJORA]
         self.factorEvolutivo.append(indicadores[TipoIndicadoresMH.FACTOR_EVOLUTIVO])
               
-    def optimizarParametrosMH(self):
+    def optimizarParametrosMH(self, params):
         ret = {}
         for parametro in self.parametrosAuto:
             if (self.mejoraAcumulada < 0 

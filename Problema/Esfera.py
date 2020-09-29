@@ -6,7 +6,8 @@ class Esfera(Problema):
         self.numDimensiones = 2
         minimo = np.ones(self.numDimensiones) * -100
         maximo = np.ones(self.numDimensiones) * 100
-        self.dominioDimensiones = np.array([minimo,maximo])
+        #self.dominioDimensiones = np.array([minimo,maximo])
+        self.dominioDimensiones = np.array([-100,100])
         self.mejorEvaluacion = None
         self.mejoresSoluciones = None
         self.parametros = {}
@@ -46,10 +47,12 @@ class Esfera(Problema):
     def generarSoluciones(self, numero):
         res = []
         if numero > 0:
-            minimos = self.getDominioDim()[0]
+            #minimos = self.getDominioDim()[0]
+            minimos = np.array([-100,-100])
             #print(minimos)
             #exit()
-            maximos = self.getDominioDim()[1]
+            #maximos = self.getDominioDim()[1]
+            maximos = np.array([100,100])
             if self.mejoresSoluciones is not None:
                 promedio = np.average(self.mejoresSoluciones,axis=0)
                 minimos = promedio - (promedio*0.1)

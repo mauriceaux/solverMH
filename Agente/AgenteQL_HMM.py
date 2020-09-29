@@ -121,7 +121,7 @@ class AgenteQL_HMM:
             ])
             n_states = len(self.states)
             
-            self.dhmm = hmm.MultinomialHMM(n_components=n_states, n_iter=100, verbose=False, init_params="s", params='es')
+            self.dhmm = hmm.MultinomialHMM(n_components=n_states, n_iter=100, verbose=True, init_params="s", params='e')
             #self.dhmm = hmm.MultinomialHMM(n_components=n_states, startprob_prior=Pi, transmat_prior=A, init_params="",  n_iter=100)
             self.dhmm.n_features = 7
             #self.dhmm.n_features_ = 7
@@ -131,6 +131,10 @@ class AgenteQL_HMM:
             self.dhmm.emissionprob_=B
             self.dhmm.emissionprob_prior=B
             self.dhmm.startprob_=Pi
+            self.dhmm.monitor_.verbose = True
+            self.dhmm.monitor_.tol = 0.0001
+            #print(self.dhmm.monitor_)
+            #exit()
             #self.dhmm.startprob_prior = Pi
             #with open("hmm-model.pkl", "wb") as file: pickle.dump(self.dhmm, file)
         
@@ -168,18 +172,21 @@ class AgenteQL_HMM:
         data = np.array([self.FEDiscreto]).T
         #print(data)
         estado = [0]
-        
-        if np.prod(data.shape) >= 80 and np.unique(data).shape[0] == self.dhmm.n_features:
+        print(f"np.unique(data).shape[0] {np.unique(data).shape[0]} self.dhmm.n_features {self.dhmm.n_features}")
+        if np.unique(data).shape[0] >= self.dhmm.n_features:
             #print(f"entrenando hmm")
             #print(self.dhmm.emissionprob_)
             #print(self.dhmm.startprob_)
+            #for _ in range(10):
             self.dhmm.fit(data)
+            #score = self.dhmm.score(data)
+            #print(f"score de hmm : {score}")
             
             with open("hmm-model.pkl", "wb") as file: pickle.dump(self.dhmm, file)
 
         ( log_prob, estado ) = self.dhmm.decode(data, algorithm="viterbi")
         #estado = self.dhmm.predict(data)
-        #print(log_prob)
+        print(f"log_prob {np.exp(log_prob)} converged {self.dhmm.monitor_.converged}")
         #print(estado)
         #print(np.array(self.FEDiscreto))
         #print(f"self.dhmm.startprob_ {self.dhmm.startprob_}")
